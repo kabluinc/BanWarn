@@ -192,12 +192,7 @@ class Main extends PluginBase implements Listener{
 				}
 				$index++;
 			}
-			$reason = "You are banned: \n".$reason; //TODO::Translate
-			//IP_Ban
-			$ip = $this->getServer()->getPlayer($args[0])->getAddress();
-			$this->banIP($ip, $reason, $playerName, $this->getTypeAsNameOfSender($sender));
-			//Client-Ban
-			$this->banClient($playerName, $playerID);
+			$playername->setBanned(true);
 		}
 	}
 	private function addOfflineWarn($args, $sender){
