@@ -37,46 +37,6 @@ class Main extends PluginBase implements Listener{
 		$this->config->save();
 	}
     
-	public function onJoin(PlayerLoginEvent $event){
-		$isAlreadyBanned = false;
-		$playerID = $event->getPlayer()->getClientId();
-		$playerName = $event->getPlayer();
-		foreach($this->clientBan->getAll() as $rawPlayerID){
-			if($playerID == $rawPlayerID){
-				$reason = "";
-				$index = 0;
-				foreach($this->warnsys->get($playerID) as $playerData){
-					if($index != 0){
-						$reason = $reason.TF::GREEN."W ".TF::WHITE.$index.": ".TF::GREEN."Reason: ".TF::GOLD.$playerData[0]."\n"; //TODO::Translate
-					}
-					$index++;
-				}
-				$reason = "You are banned: \n".$reason;
-				$event->getPlayer()->kick($reason, false);
-				$isAlreadyBanned = true;
-			}
-		}
-		if($this->countWPoints($playerID) >= $this->config->get("max-points-until-ban") && !$isAlreadyBanned){
-			$reason = "";
-			$index = 0;
-			foreach($this->warnsys->get($playerID) as $playerData){
-				if($index != 0){
-					$reason = $reason.TF::GREEN."W ".TF::WHITE.$index.": ".TF::GREEN."Reason: ".TF::GOLD.$playerData[0]."\n"; //TODO::Translate
-				}
-				if($index == 1){
-					$reason = $reason."\n\n\n";
-				}
-				$index++;
-			}
-			$reason = "You are banned: \n".$reason; //TODO::Translate
-			//IP_Ban
-			$ip = $event->getPlayer()->getAddress();
-			$this->banIP($ip, $reason, $playerName);
-			//Client-Ban
-			$this->banClient($playerName, $playerID);
-		}
-	}
-    
 	private function parseWPpromptMsg($msg, $playerName, $sender){
 		$doEnd = true;
 		if($msg == "abort"){
